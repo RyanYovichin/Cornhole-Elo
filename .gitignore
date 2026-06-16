@@ -8,4 +8,5 @@ dist/
 build/
 *.egg
 *.egg-info/
+Cornhole-Elo/
 *.egg-info
