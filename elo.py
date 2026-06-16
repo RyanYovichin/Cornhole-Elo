@@ -38,14 +38,23 @@ class elo:
                 self.zscore[player] = 11
             ranks[player] = self.players[player]
             self.zscore[player] -=1 if self.zscore[player] > 0 else 0
-        rt1 = ranks[P1] + ranks[P2]
-        rt2 = ranks[P3] + ranks[P4]
-        diff = rt1 - rt2
-        exp = diff/50
+        rt1 = (ranks[P1] + ranks[P2]) / 2
+        rt2 = (ranks[P3] + ranks[P4]) / 2
+        # expected probability that team2 (losers) wins — always between 0 and 1
+        exp = 1 + (rt2-rt1)/300
+        expected_t2 = exp if exp > 0 else 0
+        expected_t2 = expected_t2 if expected_t2 < 1 else 1
+        if P1 >P3 and P1 > P4 and P2 > P3 and P2 > P4:
+
+            ad = .8
+        elif P1 < P3 and P1 < P4 and P2 < P3 and P2 < P4:
+            ad = 1.25
+        else:
+            ad = 1
         for p in [P1, P2]:
-            self.players[p] = self.players[p] + 8*(1+exp)*(1+self.zscore[p]/10)
+            self.players[p] = self.players[p] +  16 * (expected_t2) * (1 + self.zscore[p] / 20) * ad
         for p in [P3, P4]:
-            self.players[p] = self.players[p] - 8*(1+exp)*(1+self.zscore[p]/10)
+            self.players[p] = self.players[p] -  16 * (expected_t2) * (1 + self.zscore[p] / 20) *ad
                 
     
     def Elo(self):
