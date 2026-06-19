@@ -8,10 +8,10 @@ class elo:
     
     def addgame(self):
         print("Enter game details: ")
-        a1 = input("P1: ")
-        a2 = input("P2: ")
-        b1 = input("P3: ")
-        b2 = input("P4: ")
+        a1 = input("P1: ").strip().lower()
+        a2 = input("P2: ").strip().lower()
+        b1 = input("P3: ").strip().lower()
+        b2 = input("P4: ").strip().lower()
         g = input("Game number: ")
         g = int(g)
         team1  = {"w1": a1, "w2": a2}
@@ -26,11 +26,21 @@ class elo:
             for row in reader:
                 g, a1, a2, b1, b2 = row
                 g = int(g)
+                # normalize names to lowercase and strip whitespace for case-insensitive matching
+                a1 = a1.strip().lower()
+                a2 = a2.strip().lower()
+                b1 = b1.strip().lower()
+                b2 = b2.strip().lower()
                 team1  = {"w1": a1, "w2": a2}
                 team2  = {"l1": b1, "l2": b2}
                 self.games[g] = {"team1": team1, "team2": team2}
     
     def gamescore(self, P1, P2, P3, P4):
+        # normalize incoming player names to ensure case-insensitive handling
+        P1 = P1.strip().lower()
+        P2 = P2.strip().lower()
+        P3 = P3.strip().lower()
+        P4 = P4.strip().lower()
         ranks = {}
         for player in [P1, P2, P3, P4]:
             if player not in self.players:
@@ -46,9 +56,9 @@ class elo:
         expected_t2 = expected_t2 if expected_t2 < 1 else 1
         if P1 >P3 and P1 > P4 and P2 > P3 and P2 > P4:
 
-            ad = .8
+            ad = .7
         elif P1 < P3 and P1 < P4 and P2 < P3 and P2 < P4:
-            ad = 1.25
+            ad = 1/.7
         else:
             ad = 1
         for p in [P1, P2]:

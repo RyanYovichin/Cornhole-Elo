@@ -271,7 +271,8 @@ class MainWindow(QtWidgets.QMainWindow):
                                           'All 4 player names are required.')
             return
         with open('games.csv', 'a', newline='') as f:
-            csv.writer(f).writerow([gnum, p1, p2, p3, p4])
+            # store names normalized to lowercase for case-insensitive matching
+            csv.writer(f).writerow([gnum, p1.lower(), p2.lower(), p3.lower(), p4.lower()])
         self.e.readgames()
         self._refresh_games()
         self.statusBar().showMessage(f'Game {gnum} added')
